@@ -1,0 +1,12 @@
+# Use:
+Create symlinks to the files in the corresponding folder structure in home folder.
+
+# Vim
+- install vundle plugin in ~/.vim/bundle
+- install stuff with vundle
+- create undo foler: ~/.vim/undodir
+
+# Xmonad
+If there are problems importing xmonad modules, try running:
+$ cabal install xmonad
+$ cabal install xmonad-contrib --flags="-use_xft"

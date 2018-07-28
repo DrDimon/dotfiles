@@ -1,0 +1,41 @@
+Config { font = "-*-Fixed-Bold-R-Normal-*-13-*-*-*-*-*-*-*"
+       , bgColor = "black"
+       , fgColor = "grey"
+       , position = Top
+       , overrideRedirect = True
+       , persistent = True
+       , lowerOnStart = True 
+       , allDesktops = True
+       , commands = [
+                      Run Uptime ["-t", "(<hours>:<minutes>)"] 60
+                    , Run Cpu ["-L","5","-H","50","--normal","#00aa00","--high","red"] 10
+                    , Run Memory ["-t","Mem: <usedratio>%"] 10
+                    , Run Date "%a %b %_d %H:%M:%S" "date" 10
+                    , Run StdinReader
+                    -- next two commands are mostly from https://wiki.archlinux.org/index.php/Xmobar
+                    , Run DynNetwork     [ "--template" , "<dev>: <tx>kB/s|<rx>kB/s"
+                                         , "--Low"      , "1000"       -- units: B/s
+                                         , "--High"     , "5000"       -- units: B/s
+                                         , "--low"      , "#00aa00"
+                                         , "--normal"   , "orange"
+                                         , "--high"     , "red"
+                                         ] 10
+                    , Run Battery        [ "--template" , "Battery: <acstatus>"
+                                         , "--Low"      , "20"        -- units: %
+                                         , "--High"     , "80"        -- units: %
+                                         , "--low"      , "red"
+                                         , "--normal"   , "orange"
+                                         , "--high"     , "#00aa00"
+                                         , "--" -- battery specific options
+                                                   , "-o"	, "<left>% (<timeleft>)"
+                                                   , "-O"	, "<fc=#dAA520>Charging</fc>"
+                                                   , "-i"	, "<fc=#00aa00>Charged</fc>"
+                                         ] 50
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+
+       , template = "%StdinReader% } %battery% { %dynnetwork% <fc=#888888>|</fc> %cpu% %memory% <fc=#888888>|</fc> <fc=#00aa00>%date%</fc> <fc=#888888>%uptime%</fc> "
+       }
+
+
