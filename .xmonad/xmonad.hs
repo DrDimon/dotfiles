@@ -12,7 +12,7 @@ main = do
     spawnPipe "nm-applet"
     xmonad $ docks $ defaultConfig
         { manageHook = manageDocks <+> manageHook defaultConfig
-        , layoutHook = smartBorders $ avoidStruts  $  layoutHook defaultConfig
+        , layoutHook = smartBorders $ avoidStruts $ layoutHook defaultConfig
         , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput  = hPutStrLn xmproc
                         , ppTitle   = xmobarColor "#00aa00" "" . shorten 50
@@ -24,7 +24,7 @@ main = do
                         }
         , borderWidth        = 2
         , modMask            = mod4Mask
-        , focusedBorderColor = "#ff0000"
+        , focusedBorderColor = "#008800"
         , terminal           = "gnome-terminal"
         } `additionalKeys`
         [ ((mod4Mask .|. shiftMask, xK_l), spawn "xscreensaver-command -lock")

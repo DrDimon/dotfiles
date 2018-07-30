@@ -10,8 +10,10 @@
     Plugin 'ctrlpvim/ctrlp.vim'
     Plugin 'easymotion/vim-easymotion'
     Plugin 'mhinz/vim-startify'
+    Plugin 'RRethy/vim-illuminate'
     Plugin 'scrooloose/nerdtree'
     Plugin 'terryma/vim-multiple-cursors'
+    Plugin 'tpope/vim-fugitive'
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
     Plugin 'xuyuanp/nerdtree-git-plugin'
@@ -21,7 +23,7 @@
 "END VUNDLE
 
 " BEGIN PLUGIN SETTINGS:
-" gitgutter
+" gitgutter, illuminate:
   set updatetime=100
 
 " ctrlp:
@@ -41,6 +43,9 @@
   vmap  sj <Plug>(easymotion-w)
   nmap  sk <Plug>(easymotion-b)
   vmap  sk <Plug>(easymotion-b)
+
+" illuminate
+  let g:Illuminate_ftblacklist = ['nerdtree']
 
 " Nerdtree
   let NERDTreeMinimalUI = 1

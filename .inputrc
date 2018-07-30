@@ -1,0 +1,12 @@
+set editing-mode vi
+
+set show-mode-in-prompt on
+set vi-ins-mode-string (I)
+set vi-cmd-mode-string (N)
+# Normal mode
+set keymap vi-command
+"G": end-of-history
+
+# Insert mode:
+set keymap vi-insert
+"lkj": vi-movement-mode
