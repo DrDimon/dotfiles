@@ -17,6 +17,18 @@
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
     Plugin 'xuyuanp/nerdtree-git-plugin'
+    Plugin 'vim-scripts/darkbone.vim'
+    " JOBXX
+    " Mojolicious highlighting
+    Plugin 'yko/mojo.vim'
+    " JSON highlighting
+    Plugin 'elzr/vim-json'
+    " Bedre perl highlighting
+    Plugin 'vim-perl/vim-perl'
+    " LESS-highlighting
+    Plugin 'groenewege/vim-less'
+    " Bedre javascript highlighting
+    Plugin 'pangloss/vim-javascript'
   "END PLUGINS
   call vundle#end()
   filetype plugin indent on
@@ -25,6 +37,9 @@
 " BEGIN PLUGIN SETTINGS:
 " gitgutter, illuminate:
   set updatetime=100
+  nmap sb <Plug>GitGutterStageHunk
+  nmap sn <Plug>GitGutterUndoHunk
+  nmap sm <Plug>GitGutterUndoHunk
 
 " ctrlp:
   let g:ctrlp_max_files = 0
@@ -95,6 +110,9 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-h> <C-w>h
 map <C-l> <C-w>l
+" better scroll:
+map J <C-E>
+map K <C-Y>
 
 " Return to last edit position when opening files
 autocmd BufReadPost *
