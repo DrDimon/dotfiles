@@ -1,6 +1,7 @@
 import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Layout.NoBorders
@@ -10,7 +11,8 @@ main = do
     xmproc <- spawnPipe "xmobar"
     spawnPipe "xscreensaver -no-splash"
     spawnPipe "nm-applet"
-    xmonad $ docks $ defaultConfig
+    spawnPipe "redshift -r"
+    xmonad $ ewmh $ docks $ defaultConfig
         { manageHook = manageDocks <+> manageHook defaultConfig
         , layoutHook = smartBorders $ avoidStruts $ layoutHook defaultConfig
         , logHook = dynamicLogWithPP xmobarPP
@@ -30,4 +32,6 @@ main = do
         [ ((mod4Mask .|. shiftMask, xK_l), spawn "xscreensaver-command -lock")
         , ((mod4Mask .|. shiftMask, xK_p), spawn "scrot")
         , ((mod4Mask .|. shiftMask, xK_b), sendMessage ToggleStruts)
+        , ((mod4Mask .|. shiftMask, xK_n), spawn "pkill -USR1 redshift")
+        , ((mod4Mask .|. shiftMask, xK_m), spawn "~/dotfiles/bin/refresh_firefox.sh")
         ]

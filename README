@@ -10,3 +10,7 @@ Create symlinks to the files in the corresponding folder structure in home folde
 If there are problems importing xmonad modules, try running:
 $ cabal install xmonad
 $ cabal install xmonad-contrib --flags="-use_xft"
+
+# Dependencies
+- redshift
+- xdotool
