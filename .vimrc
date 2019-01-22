@@ -16,8 +16,9 @@
     Plugin 'tpope/vim-fugitive'
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
-    Plugin 'xuyuanp/nerdtree-git-plugin'
     Plugin 'vim-scripts/darkbone.vim'
+    Plugin 'wting/gitsessions.vim'
+    Plugin 'xuyuanp/nerdtree-git-plugin'
     " JOBXX
     " Mojolicious highlighting
     Plugin 'yko/mojo.vim'
@@ -31,7 +32,6 @@
     Plugin 'pangloss/vim-javascript'
   "END PLUGINS
   call vundle#end()
-  filetype plugin indent on
 "END VUNDLE
 
 " BEGIN PLUGIN SETTINGS:
@@ -69,6 +69,11 @@
   autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " airline
+
+" gitsessions
+nnoremap <leader>gss :GitSessionSave<cr>
+nnoremap <leader>gsl :GitSessionLoad<cr>
+nnoremap <leader>gsd :GitSessionDelete<cr>
 
 " END PLUGIN SETTINGS:
 
@@ -119,3 +124,26 @@ autocmd BufReadPost *
   \ if line("'\"") > 0 && line("'\"") <= line("$") |
   \  exe "normal! g`\"" |
   \ endif
+
+"" Auto Session:
+"function! MakeSession()
+"  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+"  if (filewritable(b:sessiondir) != 2)
+"    exe 'silent !mkdir -p ' b:sessiondir
+"    redraw!
+"  endif
+"  let b:filename = b:sessiondir . '/session.vim'
+"  exe "mksession! " . b:filename
+"endfunction
+"
+"function! LoadSession()
+"  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+"  let b:sessionfile = b:sessiondir . "/session.vim"
+"  if (filereadable(b:sessionfile))
+"    exe 'source ' b:sessionfile
+"  else
+"    echo "No session loaded."
+"  endif
+"endfunction
+"au VimEnter * nested :call LoadSession()
+"au VimLeave * :call MakeSession()
