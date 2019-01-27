@@ -9,6 +9,8 @@
     Plugin 'chriskempson/base16-vim'
     Plugin 'ctrlpvim/ctrlp.vim'
     Plugin 'easymotion/vim-easymotion'
+    Plugin 'ericcurtin/CurtineIncSw.vim'
+    Plugin 'kblin/vim-fountain'
     Plugin 'mhinz/vim-startify'
     Plugin 'RRethy/vim-illuminate'
     Plugin 'scrooloose/nerdtree'
@@ -42,6 +44,7 @@
   nmap sm <Plug>GitGutterUndoHunk
 
 " ctrlp:
+  let g:ctrlp_working_path_mode = 1
   let g:ctrlp_max_files = 0
   let g:ctrlp_max_depth = 50
   let g:ctrlp_extensions = ['line', 'changes']
@@ -58,6 +61,9 @@
   vmap  sj <Plug>(easymotion-w)
   nmap  sk <Plug>(easymotion-b)
   vmap  sk <Plug>(easymotion-b)
+
+"  CurtineIncSw (header/source swithc)
+  nmap sh :call CurtineIncSw()<CR>
 
 " illuminate
   let g:Illuminate_ftblacklist = ['nerdtree']
