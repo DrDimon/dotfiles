@@ -204,6 +204,57 @@ autocmd BufReadPost *
   \  exe "normal! g`\"" |
   \ endif
 
+" Set custom tabline:
+" mostly from :help setting-tabline
+  hi User9 term=bold cterm=bold
+
+  function NumberedTabs()
+    let s = ''
+    for i in range(tabpagenr('$'))
+      " select the highlighting
+      if i + 1 == tabpagenr()
+        let s .= '%#TabLineSel#'
+      else
+        let s .= '%#TabLine#'
+      endif
+
+      " set the tab page number (for mouse clicks)
+      let s .= '%' . (i + 1) . 'T'
+
+      " Create label:
+      let buflist = tabpagebuflist(i+1)
+      let winnr = tabpagewinnr(i+1)
+
+      " Number each tab:
+      let s .= i+1
+
+      " Display + or - if modified or not:
+      let modified = 0
+      for b in buflist " Loop all buffers in this tab:
+        if getbufvar( b, "&modified" )
+          let modified = 1
+        endif
+      endfor
+      let s .= modified ? '%9*+%*' : '-'
+
+      " Write filename:
+      let name = bufname(buflist[winnr - 1])
+      let s .= name == '' ? 'New' : name
+
+      let s .= ' '
+
+    endfor
+
+    " after the last tab fill with TabLineFill and reset tab page nr
+    let s .= '%#TabLineFill#%T'
+
+    return s
+  endfunction
+
+  set tabline=%!NumberedTabs()
+
+"= END CUSTOM TABLINE ======================
+
 "" Auto Session:
 "function! MakeSession()
 "  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
