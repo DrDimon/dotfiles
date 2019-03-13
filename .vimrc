@@ -11,20 +11,25 @@
     Plugin 'ctrlpvim/ctrlp.vim'
     Plugin 'easymotion/vim-easymotion'
     Plugin 'ericcurtin/CurtineIncSw.vim'
+    Plugin 'godlygeek/tabular' "before vim-markdown
     Plugin 'gabrielelana/vim-markdown'
+    Plugin 'jceb/vim-orgmode'
     Plugin 'junegunn/vim-easy-align'
     Plugin 'junegunn/goyo.vim'
     Plugin 'junegunn/limelight.vim'
     Plugin 'junegunn/seoul256.vim'
     Plugin 'kblin/vim-fountain'
+    Plugin 'matze/vim-move'
+    Plugin 'mbbill/undotree'
     Plugin 'RRethy/vim-illuminate'
     Plugin 'scrooloose/nerdtree'
-    Plugin 'terryma/vim-multiple-cursors'
     Plugin 'tommcdo/vim-exchange'
     Plugin 'tpope/vim-fugitive'
     Plugin 'tpope/vim-surround'
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
+    Plugin 'vim-pandoc/vim-pandoc'
+    Plugin 'vim-pandoc/vim-pandoc-syntax'
     Plugin 'vim-scripts/darkbone.vim'
     Plugin 'vim-scripts/replacewithregister'
     Plugin 'vim-voom/VOoM'
@@ -53,8 +58,6 @@ colorscheme seoul256
 set background=dark
 let g:seoul256_background = 233
 colo seoul256
-" colorscheme base16-default-dark
-"colorscheme darkbone
 syntax enable
 
 " BEGIN PLUGIN SETTINGS:
@@ -124,6 +127,9 @@ syntax enable
 
   autocmd! User GoyoEnter call <SID>goyo_enter()
   autocmd! User GoyoLeave call <SID>goyo_leave()
+
+" vim-move
+  let g:move_key_modifier = 'C'
 
 " illuminate
   let g:Illuminate_ftblacklist = ['nerdtree']
@@ -260,6 +266,8 @@ autocmd BufReadPost *
   endfunction
 
   set tabline=%!NumberedTabs()
+
+ filetype plugin indent on
 
 "= END CUSTOM TABLINE ======================
 
