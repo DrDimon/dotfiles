@@ -2,29 +2,33 @@
   set nocompatible
   filetype off
   set rtp+=~/.vim/bundle/Vundle.vim
+  set rtp+=~/.fzf
   call vundle#begin()
   Plugin 'VundleVim/Vundle.vim'
   "BEGIN PLUGINS
     Plugin 'airblade/vim-gitgutter'
     Plugin 'AndrewRadev/splitjoin.vim'
-    Plugin 'chriskempson/base16-vim'
-    Plugin 'ctrlpvim/ctrlp.vim'
     Plugin 'easymotion/vim-easymotion'
     Plugin 'ericcurtin/CurtineIncSw.vim'
     Plugin 'godlygeek/tabular' "before vim-markdown
     Plugin 'gabrielelana/vim-markdown'
     Plugin 'jceb/vim-orgmode'
     Plugin 'junegunn/vim-easy-align'
+    Plugin 'junegunn/fzf.vim'
     Plugin 'junegunn/goyo.vim'
     Plugin 'junegunn/limelight.vim'
     Plugin 'junegunn/seoul256.vim'
     Plugin 'kblin/vim-fountain'
     Plugin 'matze/vim-move'
     Plugin 'mbbill/undotree'
+    Plugin 'mileszs/ack.vim'
+    Plugin 'Olical/vim-enmasse'
     Plugin 'RRethy/vim-illuminate'
     Plugin 'scrooloose/nerdtree'
+    Plugin 'SirVer/ultisnips'
     Plugin 'tommcdo/vim-exchange'
     Plugin 'tpope/vim-fugitive'
+    Plugin 'tpope/vim-repeat'
     Plugin 'tpope/vim-surround'
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
@@ -36,6 +40,7 @@
     Plugin 'wellle/targets.vim'
     Plugin 'wting/gitsessions.vim'
     Plugin 'xuyuanp/nerdtree-git-plugin'
+    Plugin 'drdimon/vim-revytex'
     " JOBXX
     " Mojolicious highlighting
     Plugin 'yko/mojo.vim'
@@ -90,8 +95,8 @@ syntax enable
   vmap  se <Plug>(easymotion-bd-jk)
   nmap  sw <Plug>(easymotion-overwin-w)
   vmap  sw <Plug>(easymotion-bd-w)
-  nmap  f <Plug>(easymotion-sl)
-  vmap  f <Plug>(easymotion-sl)
+  nmap  ½ <Plug>(easymotion-sl)
+  vmap  ½ <Plug>(easymotion-sl)
 
 "  CurtineIncSw (header/source swithc)
   nmap sh :call CurtineIncSw()<CR>
@@ -99,6 +104,10 @@ syntax enable
 " Easy align
   nmap ga <Plug>(EasyAlign)
   xmap ga <Plug>(EasyAlign)
+
+" FZF
+" Make Ctrl-P do the right thing
+  nnoremap <c-p> :call fzf#run(fzf#wrap({'source': 'find . -type f' }))<cr>
 
 " Goyo (distraction free environment)
   let g:goyo_width = '60%'
@@ -140,6 +149,15 @@ syntax enable
   let NERDTreeDirArrows = 1
   "If the last buffer is NERDtree, then vim will close:
   autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Revytex
+  let g:revytex_default_author = 'Simon'
+
+" Ultisnips
+  let g:UltiSnipsEditSplit="tabdo"
+  " This fixes problem when using ${VISUAL} in snippets:
+  " From: https://github.com/roxma/nvim-completion-manager/issues/38
+  inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 
 " airline
 
