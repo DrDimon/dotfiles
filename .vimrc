@@ -22,11 +22,11 @@
     Plugin 'matze/vim-move'
     Plugin 'mbbill/undotree'
     Plugin 'mileszs/ack.vim'
+    Plugin 'nelstrom/vim-visual-star-search'
     Plugin 'Olical/vim-enmasse'
     Plugin 'RRethy/vim-illuminate'
     Plugin 'scrooloose/nerdtree'
     Plugin 'SirVer/ultisnips'
-    Plugin 'tommcdo/vim-exchange'
     Plugin 'tpope/vim-fugitive'
     Plugin 'tpope/vim-repeat'
     Plugin 'tpope/vim-surround'
@@ -37,6 +37,7 @@
     Plugin 'vim-scripts/darkbone.vim'
     Plugin 'vim-scripts/replacewithregister'
     Plugin 'vim-voom/VOoM'
+    Plugin 'w0rp/ale'
     Plugin 'wellle/targets.vim'
     Plugin 'wting/gitsessions.vim'
     Plugin 'xuyuanp/nerdtree-git-plugin'
@@ -62,7 +63,6 @@
 colorscheme seoul256
 set background=dark
 let g:seoul256_background = 233
-colo seoul256
 syntax enable
 
 " BEGIN PLUGIN SETTINGS:
@@ -75,16 +75,6 @@ syntax enable
 " SplitJoin
   nmap sj :SplitjoinSplit<cr>
   nmap sk :SplitjoinJoin<cr>
-
-" ctrlp:
-  let g:ctrlp_working_path_mode = 1
-  let g:ctrlp_max_files = 0
-  let g:ctrlp_max_depth = 50
-  let g:ctrlp_extensions = ['line', 'changes']
-    let g:ctrlp_custom_ignore = {
-    \ 'dir':  'bin/',
-    \ 'file': '\v\.(po|pot)$|bin/',
-\ }
 
 " easymotion
   let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXY1234567890'
@@ -106,8 +96,11 @@ syntax enable
   xmap ga <Plug>(EasyAlign)
 
 " FZF
-" Make Ctrl-P do the right thing
-  nnoremap <c-p> :call fzf#run(fzf#wrap({'source': 'find . -type f' }))<cr>
+  let g:fzf_buffers_jump = 1
+  nnoremap <silent> <C-P> :call fzf#run(fzf#wrap({'source': 'find . -type f' }))<CR>
+  nnoremap <silent> <C-B> :Buffers<CR>
+  nnoremap <silent> <C-N> :Lines<CR>
+  nnoremap <silent> <C-M> :History<CR>
 
 " Goyo (distraction free environment)
   let g:goyo_width = '60%'
@@ -138,7 +131,8 @@ syntax enable
   autocmd! User GoyoLeave call <SID>goyo_leave()
 
 " vim-move
-  let g:move_key_modifier = 'C'
+" Binding only works with neovim
+  let g:move_key_modifier = 'M'
 
 " illuminate
   let g:Illuminate_ftblacklist = ['nerdtree']
@@ -149,6 +143,13 @@ syntax enable
   let NERDTreeDirArrows = 1
   "If the last buffer is NERDtree, then vim will close:
   autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" ALE linter
+nmap <silent> [e <Plug>(ale_previous_wrap)
+nmap <silent> ]e <Plug>(ale_next_wrap)
+let g:ale_linters = {
+\   'perl': ['perl'],
+\}
 
 " Revytex
   let g:revytex_default_author = 'Simon'
@@ -199,7 +200,7 @@ map <ScrollWheelUp> <C-Y>
 " set spelllang=da
 " set spelllang=en
 
-" Good undo:
+set backupdir=~/.vim/backupdir
 set undodir=~/.vim/undodir
 set undofile
 
@@ -207,6 +208,14 @@ set undofile
 set expandtab
 set shiftwidth=2
 set tabstop=2
+
+" navigation should work with linewarp.
+set textwidth=0
+set wrap linebreak
+noremap <expr> j v:count ? 'j' : 'gj'
+noremap <expr> k v:count ? 'k' : 'gk'
+noremap 0 g0
+noremap $ g$
 
 " General Keymaps
 map <space> /
@@ -224,11 +233,17 @@ map <C-l> <C-w>l
 map J <C-E>
 map K <C-Y>
 
+" Ctrl-X mode binding:
+inoremap <C-J> <C-N>
+inoremap <C-K> <C-P>
+
+if has("nvim")
+  set inccommand=split
+endif
+
 " Tab navigation:
 au TabLeave * let g:lasttab = tabpagenr()
 nnoremap gb :exe "tabn ".g:lasttab<cr>
-nnoremap H gT
-nnoremap L gt
 
 " Return to last edit position when opening files
 autocmd BufReadPost *
