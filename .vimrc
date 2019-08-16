@@ -37,7 +37,7 @@
     Plugin 'vim-scripts/darkbone.vim'
     Plugin 'vim-scripts/replacewithregister'
     Plugin 'vim-voom/VOoM'
-    Plugin 'w0rp/ale'
+    Plugin 'neomake/neomake'
     Plugin 'wellle/targets.vim'
     Plugin 'wting/gitsessions.vim'
     Plugin 'xuyuanp/nerdtree-git-plugin'
@@ -57,6 +57,10 @@
   call vundle#end()
 "END VUNDLE
 
+call neomake#configure#automake('nrwi', 500)
+let g:neomake_error_sign={'text': 'E', 'texthl': 'NeomakeErrorMsg'}
+let g:neomake_warning_sign={'text': 'W', 'texthl': 'NeomakeErrorMsg'}
+
 " Colorsettings
 "set termguicolors
 "colorscheme base16-default-dark
@@ -64,6 +68,8 @@ colorscheme seoul256
 set background=dark
 let g:seoul256_background = 233
 syntax enable
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+\%#\@<!$/
 
 " BEGIN PLUGIN SETTINGS:
 " gitgutter, illuminate:
@@ -218,9 +224,11 @@ noremap 0 g0
 noremap $ g$
 
 " General Keymaps
+noremap s <nop>
 map <space> /
 map <C-space> ?
 imap lkj <ESC>
+inoremap jj <ESC>
 command W w
 nmap st :term<CR>
 vmap st :term<CR>
@@ -229,6 +237,25 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-h> <C-w>h
 map <C-l> <C-w>l
+noremap <A-w> gt
+noremap <A-q> gT
+noremap <A-a> :call  MoveTabLeft()<CR>
+noremap <A-s> :call  MoveTabRight()<CR>
+
+function MoveTabLeft()
+    let tabnr=tabpagenr()-2
+    if tabnr >= 0
+        execute "tabmove " . tabnr
+    endif
+endfunction
+
+function MoveTabRight()
+    let tabnr=tabpagenr()+1
+    if tabnr <= tabpagenr("$")
+        execute "tabmove " . tabnr
+    endif
+endfunction
+
 " better scroll:
 map J <C-E>
 map K <C-Y>
