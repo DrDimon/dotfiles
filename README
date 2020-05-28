@@ -5,6 +5,7 @@ Create symlinks to the files in the corresponding folder structure in home folde
 - install vundle plugin in ~/.vim/bundle
 - install stuff with vundle
 - create undo foler: ~/.vim/undodir
+- create backup folder: .vim/backupdir
 
 # Xmonad
 If there are problems importing xmonad modules, try running:
@@ -14,3 +15,11 @@ $ cabal install xmonad-contrib --flags="-use_xft"
 # Dependencies
 - redshift
 - xdotool
+- xmonad
+- xmobar
+- xloadimage
+
+- xbindkeys
+  - amixer
+  - brightnessctl **TODO FIKS**
+  - playerctl
