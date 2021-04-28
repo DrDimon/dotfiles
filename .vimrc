@@ -2,46 +2,41 @@
   set nocompatible
   filetype off
   set rtp+=~/.vim/bundle/Vundle.vim
-  set rtp+=~/.fzf
+  set rtp+=~/Git/fzf
   call vundle#begin()
   Plugin 'VundleVim/Vundle.vim'
+
   "BEGIN PLUGINS
     Plugin 'airblade/vim-gitgutter'
     Plugin 'AndrewRadev/splitjoin.vim'
     Plugin 'easymotion/vim-easymotion'
-    Plugin 'ericcurtin/CurtineIncSw.vim'
+    "Plugin 'phaazon/hop.nvim'
     Plugin 'godlygeek/tabular' "before vim-markdown
-    Plugin 'gabrielelana/vim-markdown'
-    Plugin 'jceb/vim-orgmode'
     Plugin 'junegunn/vim-easy-align'
     Plugin 'junegunn/fzf.vim'
     Plugin 'junegunn/goyo.vim'
-    Plugin 'junegunn/limelight.vim'
     Plugin 'junegunn/seoul256.vim'
     Plugin 'kblin/vim-fountain'
     Plugin 'matze/vim-move'
     Plugin 'mbbill/undotree'
-    Plugin 'mileszs/ack.vim'
     Plugin 'nelstrom/vim-visual-star-search'
-    Plugin 'Olical/vim-enmasse'
     Plugin 'RRethy/vim-illuminate'
-    Plugin 'scrooloose/nerdtree'
-    Plugin 'SirVer/ultisnips'
     Plugin 'tpope/vim-fugitive'
     Plugin 'tpope/vim-repeat'
     Plugin 'tpope/vim-surround'
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
-    Plugin 'vim-pandoc/vim-pandoc'
-    Plugin 'vim-pandoc/vim-pandoc-syntax'
-    Plugin 'vim-scripts/darkbone.vim'
-    Plugin 'vim-scripts/replacewithregister'
-    Plugin 'vim-voom/VOoM'
     Plugin 'neomake/neomake'
     Plugin 'wellle/targets.vim'
-    Plugin 'wting/gitsessions.vim'
-    Plugin 'xuyuanp/nerdtree-git-plugin'
+    Plugin 'rhysd/git-messenger.vim'
+    if has('nvim-0.5')
+      Plugin 'neovim/nvim-lspconfig'
+    endif
     Plugin 'drdimon/vim-revytex'
+    Plugin 'drdimon/vim-andersen'
+    if has('nvim-0.5')
+      Plugin 'drdimon/vim-dice'
+    endif
     " JOBXX
     " Mojolicious highlighting
     Plugin 'yko/mojo.vim'
@@ -62,11 +57,11 @@ let g:neomake_error_sign={'text': 'E', 'texthl': 'NeomakeErrorMsg'}
 let g:neomake_warning_sign={'text': 'W', 'texthl': 'NeomakeErrorMsg'}
 
 " Colorsettings
-"set termguicolors
+set termguicolors
 "colorscheme base16-default-dark
 colorscheme seoul256
 set background=dark
-let g:seoul256_background = 233
+let g:seoul256_background = 230
 syntax enable
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+\%#\@<!$/
@@ -74,9 +69,13 @@ match ExtraWhitespace /\s\+\%#\@<!$/
 " BEGIN PLUGIN SETTINGS:
 " gitgutter, illuminate:
   set updatetime=100
-  nmap sm <Plug>GitGutterStageHunk
-  nmap sn <Plug>GitGutterUndoHunk
-  nmap sb <Plug>GitGutterPreviewHunk
+  nmap sn <Plug>(GitGutterUndoHunk)
+  nmap sb <Plug>(GitGutterPreviewHunk)
+
+" git-messenger
+  nmap sm :GitMessenger<CR>
+  let g:git_messenger_include_diff = 'current'
+  let g:git_messenger_max_popup_height = 20
 
 " SplitJoin
   nmap sj :SplitjoinSplit<cr>
@@ -87,12 +86,6 @@ match ExtraWhitespace /\s\+\%#\@<!$/
   let g:EasyMotion_smartcase = 1
   nmap  ss <Plug>(easymotion-overwin-f)
   vmap  ss <Plug>(easymotion-bd-f)
-  nmap  se <Plug>(easymotion-overwin-line)
-  vmap  se <Plug>(easymotion-bd-jk)
-  nmap  sw <Plug>(easymotion-overwin-w)
-  vmap  sw <Plug>(easymotion-bd-w)
-  nmap  ½ <Plug>(easymotion-sl)
-  vmap  ½ <Plug>(easymotion-sl)
 
 "  CurtineIncSw (header/source swithc)
   nmap sh :call CurtineIncSw()<CR>
@@ -103,7 +96,10 @@ match ExtraWhitespace /\s\+\%#\@<!$/
 
 " FZF
   let g:fzf_buffers_jump = 1
-  nnoremap <silent> <C-P> :call fzf#run(fzf#wrap({'source': 'find . -type f' }))<CR>
+  nnoremap <silent> <C-P> :Files<CR>
+  " Customize file search:
+  command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', '~/.vim/bundle/fzf.vim/bin/preview.sh {}']}, <bang>0)
   nnoremap <silent> <C-B> :Buffers<CR>
   nnoremap <silent> <C-N> :Lines<CR>
   nnoremap <silent> <C-M> :History<CR>
@@ -144,34 +140,36 @@ match ExtraWhitespace /\s\+\%#\@<!$/
   let g:Illuminate_ftblacklist = ['nerdtree']
   hi illuminatedWord cterm=underline gui=underline
 
-" Nerdtree
-  let NERDTreeMinimalUI = 1
-  let NERDTreeDirArrows = 1
-  "If the last buffer is NERDtree, then vim will close:
-  autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" ALE linter
-nmap <silent> [e <Plug>(ale_previous_wrap)
-nmap <silent> ]e <Plug>(ale_next_wrap)
-let g:ale_linters = {
-\   'perl': ['perl'],
-\}
-
 " Revytex
   let g:revytex_default_author = 'Simon'
 
-" Ultisnips
-  let g:UltiSnipsEditSplit="tabdo"
-  " This fixes problem when using ${VISUAL} in snippets:
-  " From: https://github.com/roxma/nvim-completion-manager/issues/38
-  inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" Dice
+" Define macros
+if has('nvim-0.5')
+lua << EOF
+  require'dice'.set_macros({
+    fate = {
+      mediocre  = 'df+1',
+      average   = 'df+1',
+      fair      = 'df+2',
+      good      = 'df+3',
+      great     = 'df+4',
+      superb    = 'df+5',
+      fantastic = 'df+6',
+      epic      = 'df+7',
+      legendary = 'df+8',
+    },
+    d20 = {
+      normal = 'd20',
+      advantage = '2d20h',
+      disadvantage = '2d20l',
+    },
+    dh = 'd100',
+  })
+EOF
+endif
 
 " airline
-
-" gitsessions
-  nnoremap <leader>gss :GitSessionSave<cr>
-  nnoremap <leader>gsl :GitSessionLoad<cr>
-  nnoremap <leader>gsd :GitSessionDelete<cr>
 
 " END PLUGIN SETTINGS:
 
@@ -185,6 +183,8 @@ set viminfo^=%
 set number
 set backspace=eol,start,indent
 set wildmode=longest,list
+set foldcolumn=0
+set conceallevel=2
 
 " Enable mouse to use scrollwhell properly, but disable mouse buttons
 " to avoid random clicking on a laptop:
@@ -202,7 +202,7 @@ map <ScrollWheelDown> <C-E>
 map <ScrollWheelUp> <C-Y>
 
 " Spelling:
-" set spell
+set spell
 " set spelllang=da
 " set spelllang=en
 
@@ -331,25 +331,61 @@ autocmd BufReadPost *
 
 "= END CUSTOM TABLINE ======================
 
-"" Auto Session:
-"function! MakeSession()
-"  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-"  if (filewritable(b:sessiondir) != 2)
-"    exe 'silent !mkdir -p ' b:sessiondir
-"    redraw!
-"  endif
-"  let b:filename = b:sessiondir . '/session.vim'
-"  exe "mksession! " . b:filename
-"endfunction
-"
-"function! LoadSession()
-"  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-"  let b:sessionfile = b:sessiondir . "/session.vim"
-"  if (filereadable(b:sessionfile))
-"    exe 'source ' b:sessionfile
-"  else
-"    echo "No session loaded."
-"  endif
-"endfunction
-"au VimEnter * nested :call LoadSession()
-"au VimLeave * :call MakeSession()
+function! ToggleClutter()
+  set nonumber
+  set signcolumn=no
+  set foldcolumn=0
+  set laststatus=0
+  GitGutterDisable
+endfunction
+
+command ToggleClutter :call ToggleClutter
+
+augroup markdown
+"  autocmd Filetype markdown :inoremap <C-b> **
+"  autocmd Filetype markdown :inoremap <C-i> *
+"  autocmd Filetype markdown :inoremap <C-u> _
+  autocmd Filetype markdown :call ToggleClutter()
+augroup end
+
+" Custom markdown functionality
+nnoremap <C-b> :set opfunc=MarkdownFormatBold<cr>g@
+vnoremap <C-b> :<C-U> call MarkdownFormatBold(visualmode(), 1)<cr>
+nnoremap <C-i> :set opfunc=MarkdownFormatItalic<cr>g@
+vnoremap <C-i> :<C-U> call MarkdownFormatItalic(visualmode(), 1)<cr>
+nnoremap <C-u> :set opfunc=MarkdownFormatUnderline<cr>g@
+vnoremap <C-u> :<C-U> call MarkdownFormatUnderline(visualmode(), 1)<cr>
+
+function! MarkdownFormatBold(type, ...)
+  call MarkdownFormat(a:type, a:0, "**")
+endfunction
+function! MarkdownFormatItalic(type, ...)
+  call MarkdownFormat(a:type, a:0, "*")
+endfunction
+function! MarkdownFormatUnderline(type, ...)
+  call MarkdownFormat(a:type, a:0, "_")
+endfunction
+
+function! MarkdownFormat(type, visual, chars)
+  " Get start and end of the motion:
+  let start_position = getpos("'[")
+  let end_position = getpos("']")
+  " If in visual mode we use the visual marks instead:
+  if a:visual
+    let start_position = getpos("'<")
+    let end_position = getpos("'>")
+  " If in linemode we change the column to the start and end of the line:
+  elseif a:type == 'line'
+    let start_position[2] = 0
+    let end_position[2] = 9999999
+  endif
+
+  " First we append chars to the end position in order to avoid messing columns
+  call setpos('.', end_position)
+  exec "norm! a" . a:chars
+  " Then insert at the start position
+  call setpos('.', start_position)
+  exec "norm! i" . a:chars
+  " Finaly move the cursor to the desired place:
+  call setpos('.', end_position)
+endfunction
