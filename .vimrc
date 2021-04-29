@@ -6,12 +6,15 @@
   call vundle#begin()
   Plugin 'VundleVim/Vundle.vim'
 
+    Plugin 'drewtempelmeyer/palenight.vim'
+
   "BEGIN PLUGINS
     Plugin 'airblade/vim-gitgutter'
     Plugin 'AndrewRadev/splitjoin.vim'
     Plugin 'easymotion/vim-easymotion'
     "Plugin 'phaazon/hop.nvim'
     Plugin 'godlygeek/tabular' "before vim-markdown
+    Plugin 'janko/vim-test'
     Plugin 'junegunn/vim-easy-align'
     Plugin 'junegunn/fzf.vim'
     Plugin 'junegunn/goyo.vim'
@@ -48,29 +51,35 @@
     Plugin 'groenewege/vim-less'
     " Bedre javascript highlighting
     Plugin 'pangloss/vim-javascript'
+    Plugin 'posva/vim-vue'
   "END PLUGINS
   call vundle#end()
 "END VUNDLE
 
-call neomake#configure#automake('nrwi', 500)
-let g:neomake_error_sign={'text': 'E', 'texthl': 'NeomakeErrorMsg'}
-let g:neomake_warning_sign={'text': 'W', 'texthl': 'NeomakeErrorMsg'}
+call neomake#configure#automake('nrwi', 100)
+let g:neomake_error_sign={'text': 'Ⓔ', 'texthl': 'NeomakeErrorMsg'}
+let g:neomake_warning_sign={'text': 'Ⓦ', 'texthl': 'NeomakeErrorMsg'}
 
 " Colorsettings
 set termguicolors
-"colorscheme base16-default-dark
-colorscheme seoul256
-set background=dark
-let g:seoul256_background = 230
+colorscheme palenight
+if (has("nvim"))
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
 syntax enable
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+\%#\@<!$/
+syntax on
 
 " BEGIN PLUGIN SETTINGS:
 " gitgutter, illuminate:
   set updatetime=100
   nmap sn <Plug>(GitGutterUndoHunk)
   nmap sb <Plug>(GitGutterPreviewHunk)
+  set foldtext=gitgutter#fold#foldtext()
+  let g:gitgutter_sign_added = '█'
+  let g:gitgutter_sign_modified = '▌'
+  let g:gitgutter_sign_removed = '▄'
+  let g:gitgutter_sign_modified_removed = '▙'
+
 
 " git-messenger
   nmap sm :GitMessenger<CR>
@@ -99,10 +108,9 @@ match ExtraWhitespace /\s\+\%#\@<!$/
   nnoremap <silent> <C-P> :Files<CR>
   " Customize file search:
   command! -bang -nargs=? -complete=dir Files
-    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', '~/.vim/bundle/fzf.vim/bin/preview.sh {}']}, <bang>0)
-  nnoremap <silent> <C-B> :Buffers<CR>
   nnoremap <silent> <C-N> :Lines<CR>
-  nnoremap <silent> <C-M> :History<CR>
+    \ call fzf#vim#files(<q-args>, {'options': ['--info=inline', '--preview', '~/.vim/bundle/fzf.vim/bin/preview.sh {}']}, <bang>0)
+  nnoremap <silent> <C-C> :BCommits<CR>
 
 " Goyo (distraction free environment)
   let g:goyo_width = '60%'
@@ -171,7 +179,18 @@ endif
 
 " airline
 
+" Test
+command TN TestNearest
+command TL TestLast
+command TF TestFile
+
 " END PLUGIN SETTINGS:
+
+if !has('nvim')
+    set viminfo=!,'1000,f1,/1000,:1000,<1000,@1000,h,n~/.viminfo
+else
+    set shada=!,'1000,f1,/1000,:1000,<1000,@1000,h,n~/.nvim_shada
+endif
 
 " General Settings
 set hlsearch
@@ -185,6 +204,9 @@ set backspace=eol,start,indent
 set wildmode=longest,list
 set foldcolumn=0
 set conceallevel=2
+set splitbelow
+set splitright
+set cursorline cursorcolumn
 
 " Enable mouse to use scrollwhell properly, but disable mouse buttons
 " to avoid random clicking on a laptop:
@@ -204,7 +226,7 @@ map <ScrollWheelUp> <C-Y>
 " Spelling:
 set spell
 " set spelllang=da
-" set spelllang=en
+set spelllang=en
 
 set backupdir=~/.vim/backupdir
 set undodir=~/.vim/undodir
@@ -223,8 +245,12 @@ noremap <expr> k v:count ? 'k' : 'gk'
 noremap 0 g0
 noremap $ g$
 
+noremap sp :e ~/.vim/scratchpad.md<CR>
+
 " General Keymaps
 noremap s <nop>
+" fix Y (yank) to end of line:
+nnoremap Y y$
 map <space> /
 map <C-space> ?
 imap lkj <ESC>
@@ -265,7 +291,10 @@ inoremap <C-J> <C-N>
 inoremap <C-K> <C-P>
 
 if has("nvim")
-  set inccommand=split
+  "set inccommand=split
+  let test#strategy = "neovim"
+  tnoremap <Esc> <C-\><C-n>
+  tnoremap <lkj> <C-\><C-n>
 endif
 
 " Tab navigation:
@@ -327,7 +356,7 @@ autocmd BufReadPost *
 
   set tabline=%!NumberedTabs()
 
- filetype plugin indent on
+filetype plugin indent on
 
 "= END CUSTOM TABLINE ======================
 
