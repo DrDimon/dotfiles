@@ -24,6 +24,7 @@
     Plugin 'mbbill/undotree'
     Plugin 'nelstrom/vim-visual-star-search'
     Plugin 'RRethy/vim-illuminate'
+    Plugin 'hrsh7th/vim-vsnip'
     Plugin 'tpope/vim-fugitive'
     Plugin 'tpope/vim-repeat'
     Plugin 'tpope/vim-surround'
@@ -178,6 +179,32 @@ EOF
 endif
 
 " airline
+
+" Vsnip
+imap <expr> <C-l> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : ''
+imap <expr> <C-h> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : ''
+let g:vsnip_snippet_dir='~/.vim/snippets'
+inoremap <silent> <C-s> <C-r>=SnippetsComplete()<CR>
+
+" https://bluz71.github.io/2017/05/21/vim-plugins-i-like.html#vim-vsnip
+function! SnippetsComplete() abort
+  let wordToComplete = matchstr(strpart(getline('.'), 0, col('.') - 1), '\S\+$')
+  let fromWhere      = col('.') - len(wordToComplete)
+  let containWord    = "stridx(v:val.word, wordToComplete)>=0"
+  let candidates     = vsnip#get_complete_items(bufnr("%"))
+  let matches        = map(filter(candidates, containWord),
+              \  "{
+              \      'word': v:val.word,
+              \      'menu': v:val.kind,
+              \      'dup' : 1,
+              \   }")
+
+  if !empty(matches)
+      call complete(fromWhere, matches)
+  endif
+
+  return ""
+endfunction
 
 " Test
 command TN TestNearest
